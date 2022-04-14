@@ -83,7 +83,13 @@ class _LoginState extends State<Login> {
                               prefixIcon: Icon(Icons.lock),
                               prefixStyle: TextStyle(color: Colors.blue, fontWeight: FontWeight.w500),
                               border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-
+                              suffixIcon: Align(
+                                widthFactor: 1.0,
+                                heightFactor: 1.0,
+                                child: Icon(
+                                  Icons.remove_red_eye,
+                                ),
+                              ),
                               filled: true,
                               fillColor: Colors.blue[50],
                             ),
