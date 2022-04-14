@@ -1,0 +1,155 @@
+import 'package:flutter/material.dart';
+import 'StatefulTab.dart';
+
+void main() {
+  runApp(new MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return new MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Drawer',
+      theme: new ThemeData(
+        backgroundColor: Color.fromRGBO(255, 89, 199, 1),
+      ),
+      home: new MyHomePage(viewName: 'A'),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  MyHomePage({Key key, this.viewName}) : super(key: key);
+
+  final String viewName;
+
+  @override
+  _MyHomePageState createState() => new _MyHomePageState(viewName: viewName);
+}
+
+class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
+  String viewName;
+
+  _MyHomePageState({Key key, this.viewName});
+
+  TabController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = new TabController(
+      length: 3,
+      vsync: this,
+    );
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  _buildTabContext(int viewname) => Container(
+        child: ListView.builder(
+          physics: const ClampingScrollPhysics(),
+          itemCount: viewname,
+          itemBuilder: (BuildContext context, int index) {
+            return Text('some content');
+          },
+        ),
+      );
+
+  @override
+  Widget build(BuildContext context) {
+    var tabs = <Tab>[
+      new Tab(icon: new Icon(Icons.audiotrack), text: "Songs"),
+      new Tab(icon: new Icon(Icons.collections), text: "Gallery"),
+      new Tab(icon: new Icon(Icons.article), text: "Personil Data"),
+    ];
+
+    return new Scaffold(
+      appBar: new AppBar(
+        backgroundColor: Color.fromRGBO(255, 89, 199, 1),
+        title: new Text(viewName),
+      ),
+
+      // body: new TabBarView(
+      //   controller: controller,
+
+      // children: <Widget>[
+
+      //   new StatefulTab(viewName: viewName),
+      //   new Center(child: new Text('This is the Tab 2 for view $viewName')),
+      //   new Center(child: new Text('This is the Tab 3 for view $viewName'))
+      // ]),
+      bottomNavigationBar: new Material(
+        color: Color.fromRGBO(255, 89, 199, 1),
+        child: new TabBar(
+          controller: controller,
+          tabs: tabs,
+          labelColor: Colors.black87,
+          unselectedLabelColor: Colors.white,
+        ),
+      ),
+      drawer: new Drawer(
+        child: new ListView(
+          children: <Widget>[
+            UserAccountsDrawerHeader(
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(255, 89, 199, 1),
+              ),
+              currentAccountPicture: ClipOval(
+                child: Image(image: AssetImage('assets/images/jennie.jpg'), fit: BoxFit.cover),
+              ),
+              otherAccountsPictures: [
+                ClipOval(
+                  child: Image(image: AssetImage('assets/images/jiso.jpg'), fit: BoxFit.cover),
+                ),
+                ClipOval(
+                  child: Image(image: AssetImage('assets/images/lisa.png'), fit: BoxFit.cover),
+                )
+              ],
+              accountName: Text('Aldi Rizky Gunawan'),
+              accountEmail: Text('Aldirizkyg17@gmail.com'),
+            ),
+            new ClipRect(
+              child: new Column(
+                children: <Widget>[
+                  new ListTile(
+                    leading: const Icon(Icons.folder),
+                    title: new Text('Data'),
+                    onTap: () => _loadView('A', context),
+                  ),
+                  new ListTile(
+                    leading: const Icon(Icons.group),
+                    title: new Text('Social'),
+                    onTap: () => _loadView('B', context),
+                  ),
+                  new ListTile(
+                    leading: const Icon(Icons.access_time),
+                    title: new Text('Recent'),
+                    onTap: () => _loadView('C', context),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  _loadView(String view, BuildContext context) {
+    Navigator.of(context).pop();
+    setState(() {
+      if (view == 'A') {
+        viewName = 'A';
+      } else if (view == 'B') {
+        viewName = 'B';
+      } else if (view == 'C') {
+        viewName = 'C';
+      }
+    });
+  }
+}
